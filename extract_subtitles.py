@@ -29,7 +29,7 @@ ADJUST_MODE = True
 #Video path of the source file
 videopath = sys.argv[1]
 #Directory to store the processed frames
-dir = "temp/"
+dir = "frames/"
 #smoothing window size
 len_window = int(sys.argv[2])
 
