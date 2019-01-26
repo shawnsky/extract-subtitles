@@ -23,8 +23,27 @@ USE_LOCAL_MAXIMA = True
 #Number of top sorted frames
 NUM_TOP_FRAMES = 20
 
+
+'''
+Using crop mode(crop out subtitles area) can greatly improve recognition accuracy, 
+but you need to manually adjust the crop area by modifying the value of cropper 
+parameters(x, y, w, h).
+To debug the appropriate value, set ADJUST_MODE = True to show cropped result.
+'''
+
+#Use croped frame
+USE_CROP = False
 #Adjust crop area mode
 ADJUST_MODE = True
+#Set cropper parameters
+#left_padding
+x=150
+#top_padding
+y=430
+#window_width
+w=600
+#window_height
+h=40
 
 #Video path of the source file
 videopath = sys.argv[1]
@@ -38,16 +57,7 @@ LANG='chi_sim'
 
 
 
-#set cropper parameters
 
-#left_padding
-x=150
-#top_padding
-y=430
-#window_width
-w=600
-#window_height
-h=40
 
 
 def smooth(x, window_len=13, window='hanning'):
@@ -111,10 +121,10 @@ def ocr_im(name):
     inverted_im=PIL.ImageOps.invert(im)
     #inverted_im.show()
     croped_im=inverted_im.crop((x,y,x+w,y+h))
-    if ADJUST_MODE:
+    if ADJUST_MODE and USE_CROP:
         croped_im.show()
         ADJUST_MODE = False
-    text=pytesseract.image_to_string(croped_im, LANG)
+    text=pytesseract.image_to_string(croped_im if USE_CROP else inverted_im, LANG)
     return text
     
 
